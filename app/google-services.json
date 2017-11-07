@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "130844546471",
+    "firebase_url": "https://motion-23c22.firebaseio.com",
+    "project_id": "motion-23c22",
+    "storage_bucket": "motion-23c22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130844546471:android:10abf9f5871e2762",
+        "android_client_info": {
+          "package_name": "org.fuzz.motiondetection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130844546471-dsca1mq8h1m4r3f07udqbkuj7kkj3up1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.fuzz.motiondetection",
+            "certificate_hash": "5a45b49ad8b6b095c901d5b79f8f5f06f770f188"
+          }
+        },
+        {
+          "client_id": "130844546471-9pbqpoaiqhbtlqk9stkdp1l395voasaj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW2lsp23Ne1atw-yd_v2GyZmohcDLGmL0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130844546471-9pbqpoaiqhbtlqk9stkdp1l395voasaj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
