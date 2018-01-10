@@ -65,10 +65,17 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
+            <CheckBox
+                android:id="@+id/save_credentials_checkbox"
+                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save details?" />
+
+            <Button
+                android:id="@+id/login_button"
+                style="@android:style/Widget.Material.Light.Button.Borderless"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_log_in_short"

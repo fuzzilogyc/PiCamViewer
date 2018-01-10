@@ -6,6 +6,7 @@ import android.annotation.TargetApi
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,12 +14,14 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
-import org.fuzz.motiondetection.webcamimage.WebcamImageActivity
 import org.fuzz.motiondetection.R
-import org.fuzz.motiondetection.WebcamApplication
+import org.fuzz.motiondetection.webcamimage.WebcamImageActivity
 import javax.inject.Inject
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,23 +31,36 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        AndroidInjection.inject(this);
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        (application as WebcamApplication).getAppComponent().inject(this)
         viewModel = ViewModelProviders.of(this, mViewModelFactory).get(LoginViewModel::class.java)
 
         // Set up the login form.
-        populateAutoComplete()
+        viewModel.fetchSavedCredentialsResult.observe(this, object : Observer<Pair<String, String>> {
+            override fun onChanged(credentials: Pair<String, String>?) {
+                if (credentials == null) {
+                    return
+                }
+                populateAutoComplete(credentials.first, credentials.second)
+            }
+        })
+        viewModel.fetchLoginCredentials()
+
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                hideKeyboard()
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
 
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+        login_button.setOnClickListener { attemptLogin() }
+
+        save_credentials_checkbox.setOnCheckedChangeListener { _, checked ->
+            viewModel.mIsSaveCredentialsCheckboxTicked = checked
+        }
 
         viewModel.loginResult.observe(this, object : Observer<String> {
             override fun onChanged(token: String?) {
@@ -65,8 +81,9 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun populateAutoComplete() {
-        // Maybe use this later to save user name?
+    private fun populateAutoComplete(username: String, password: String) {
+        this.username.setText(username)
+        this.password.setText(password)
     }
 
     /**
@@ -109,8 +126,16 @@ class LoginActivity : AppCompatActivity() {
             // perform the user login attempt.
             showProgress(true)
             // call log in
-            dismissKeyboardShortcutsHelper()
             viewModel.attemptLogin(usernameStr, passwordStr)
+        }
+    }
+
+    fun hideKeyboard() {
+        // Check if no view has focus:
+        val view = currentFocus
+        if (view != null) {
+            val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
 

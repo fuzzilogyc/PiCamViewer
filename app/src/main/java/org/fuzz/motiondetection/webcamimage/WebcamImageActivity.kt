@@ -8,12 +8,11 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.AppCompatImageView
 import android.text.TextUtils
 import android.view.View
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import org.fuzz.motiondetection.R
-import org.fuzz.motiondetection.WebcamApplication
 import org.fuzz.motiondetection.login.LoginActivity
 import javax.inject.Inject
 
@@ -26,6 +25,7 @@ class WebcamImageActivity : AppCompatActivity() {
     private lateinit var viewModel: WebcamImageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -35,7 +35,6 @@ class WebcamImageActivity : AppCompatActivity() {
             ""
         }
 
-        (application as WebcamApplication).getAppComponent().inject(this)
         viewModel = ViewModelProviders.of(this, mViewModelFactory).get(WebcamImageViewModel::class.java)
 
         (findViewById<SwipeRefreshLayout>(R.id.swiperefresh)).isRefreshing = true

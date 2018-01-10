@@ -4,22 +4,27 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import io.reactivex.Observable
 import okhttp3.ResponseBody
+import org.fuzz.motiondetection.network.IRetrofit
 import org.fuzz.motiondetection.network.WebcamImageService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 import java.io.IOException
 import javax.inject.Inject
 
 
-class WebcamImageProvider @Inject constructor(retrofit: Retrofit) : IWebcamImageProvider {
+class WebcamImageProvider : IWebcamImageProvider {
 
-    private val mRetroFit : Retrofit = retrofit
+    private val mRetroFit : IRetrofit
+
+    @Inject
+    constructor(retrofit: IRetrofit) {
+        mRetroFit = retrofit
+    }
 
     override fun fetchWebcamImage(token : String) : Observable<Bitmap> {
         return Observable.create<Bitmap> { emitter ->
-            val service = mRetroFit.create<WebcamImageService>(WebcamImageService::class.java)
+            val service = mRetroFit.getRetrofitInstance().create<WebcamImageService>(WebcamImageService::class.java)
             service.get(token).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.code() == 401) {

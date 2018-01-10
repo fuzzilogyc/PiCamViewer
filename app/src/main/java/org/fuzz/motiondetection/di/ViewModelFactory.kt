@@ -2,29 +2,24 @@ package org.fuzz.motiondetection.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.util.ArrayMap
-import org.fuzz.motiondetection.webcamimage.WebcamImageViewModel
-import org.fuzz.motiondetection.login.LoginViewModel
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
 class ViewModelFactory : ViewModelProvider.Factory {
 
-    private var mCreators: ArrayMap<Class<out ViewModel>, () -> ViewModel> = ArrayMap()
+    private var mCreators: Map<Class<out ViewModel>, Provider<ViewModel>>
 
     @Inject
-    constructor(viewModelSubComponent : ViewModelSubComponent) {
-        // View models cannot be injected directly because they won't be bound to the owner's
-        // view model scope.
-        mCreators.put(LoginViewModel::class.java, { viewModelSubComponent.loginViewModel() } )
-        mCreators.put(WebcamImageViewModel::class.java, { viewModelSubComponent.webcamImageViewModel() })
+    constructor(creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>) {
+        mCreators = creators
     }
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        var creator = mCreators.get(modelClass)
+        var creator = mCreators!!.get(modelClass)
         if (creator == null) {
-            for (entry in mCreators.entries) {
+            for (entry in mCreators!!.entries) {
                 if (modelClass.isAssignableFrom(entry.key)) {
                     creator = entry.value
                     break
@@ -32,13 +27,14 @@ class ViewModelFactory : ViewModelProvider.Factory {
             }
         }
         if (creator == null) {
-            throw IllegalArgumentException("Unknown model class " + modelClass)
+            throw IllegalArgumentException("unknown viewmodel class " + modelClass)
         }
         try {
-            return creator.invoke() as T
+            return creator!!.get() as T
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
+
     }
 
 }

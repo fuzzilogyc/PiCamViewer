@@ -13,13 +13,13 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
-    internal abstract fun bindLoginViewModel(loginViewModel: LoginViewModel): ViewModel
+    abstract fun bindLoginViewModel(loginViewModel: LoginViewModel): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(WebcamImageViewModel::class)
-    internal abstract fun bindWebcamImageViewModel(webcamImageViewModel: WebcamImageViewModel): ViewModel
+    abstract fun bindWebcamImageViewModel(webcamImageViewModel: WebcamImageViewModel): ViewModel
 
     @Binds
-    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
