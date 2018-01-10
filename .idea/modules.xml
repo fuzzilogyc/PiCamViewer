@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/PiCamViewer.iml" filepath="$PROJECT_DIR$/PiCamViewer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/motiondetection.iml" filepath="$PROJECT_DIR$/motiondetection.iml" />
+      <module fileurl="file://C:\dev\PiCamViewer\motiondetection.iml" filepath="C:\dev\PiCamViewer\motiondetection.iml" />
     </modules>
   </component>
 </project>
